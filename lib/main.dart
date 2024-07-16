@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:elderlypeople/FamilyInfoPage.dart';
 import 'package:elderlypeople/ElderlyInfoPage.dart';
+import 'package:elderlypeople/ElderlySchoolPage.dart'; // 添加这个导入
+
 void main() {
   runApp(MyApp());
 }
@@ -42,6 +44,13 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  void _navigateToElderlySchool(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => ElderlySchoolPage()),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -76,8 +85,7 @@ class _HomePageState extends State<HomePage> {
                           '夕阳红活动',
                           style: TextStyle(
                             fontSize: 24.0,
-                            fontWeight: FontWeight.bold,
-                          ),
+                            fontWeight: FontWeight.bold),
                         ),
                         ElevatedButton(
                           onPressed: () {},
@@ -100,25 +108,18 @@ class _HomePageState extends State<HomePage> {
                   _buildGridItem(Icons.home, '家庭信息', () => _navigateToFamilyInfo(context)),
                   _buildGridItem(Icons.info, '老人信息', () => _navigateToElderlyInfo(context)),
                   _buildGridItem(Icons.group, '老人关联', () {}),
-                  _buildGridItem(Icons.school, '老年学堂', () {}),
+                  _buildGridItem(Icons.school, '老年学堂', () => _navigateToElderlySchool(context)),
                 ],
               ),
             ),
             Divider(thickness: 2, color: Colors.grey[300]),
-            _buildServiceSection('三助服务', [
+            _buildServiceSection('社区服务', [
               _buildServiceItem(Icons.restaurant, '助餐', Colors.green),
               _buildServiceItem(Icons.cleaning_services, '助洁', Colors.blue),
               _buildServiceItem(Icons.bathtub, '助浴', Colors.purple),
             ]),
             Divider(thickness: 2, color: Colors.grey[300]),
-            _buildServiceSection('医养服务', [
-              _buildServiceItem(Icons.bed, '预约床位', Colors.blueGrey),
-              _buildServiceItem(Icons.video_call, '视频问诊', Colors.deepPurple),
-              _buildServiceItem(Icons.accessibility_new, '预约陪诊', Colors.orange),
-              _buildServiceItem(Icons.local_pharmacy, '购药', Colors.red),
-              _buildServiceItem(Icons.folder_shared, '健康档案', Colors.brown),
-              _buildServiceItem(Icons.assessment, '健康报告', Colors.lightBlue),
-            ]),
+            _buildRecommendedArticlesSection(),
           ],
         ),
       ),
@@ -195,4 +196,42 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+
+  Widget _buildRecommendedArticlesSection() {
+    final articles = [
+      '保持健康的10个秘诀',
+      '老年人如何预防跌倒',
+      '老年人饮食指南',
+      '老年人如何保持心理健康',
+      '老年人如何进行家庭锻炼',
+    ];
+
+    return Padding(
+      padding: EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            '推荐阅读',
+            style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+          ),
+          ListView.builder(
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            itemCount: articles.length,
+            itemBuilder: (context, index) {
+              return Card(
+                margin: EdgeInsets.symmetric(vertical: 8.0),
+                child: ListTile(
+                  leading: Icon(Icons.article, color: Colors.blue),
+                  title: Text(articles[index]),
+                ),
+              );
+            },
+          ),
+        ],
+      ),
+    );
+  }
 }
+
