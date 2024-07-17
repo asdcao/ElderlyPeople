@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:elderlypeople/FamilyInfoPage.dart';
 import 'package:elderlypeople/ElderlyInfoPage.dart';
 import 'package:elderlypeople/ElderlySchoolPage.dart';
+import 'package:elderlypeople/SchedulePage.dart';
+import 'package:elderlypeople/DietRecommendationPage.dart'; // 导入 DietRecommendationPage
 
 class HomePage extends StatefulWidget {
   @override
@@ -27,6 +29,20 @@ class _HomePageState extends State<HomePage> {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => ElderlySchoolPage()),
+    );
+  }
+
+  void _navigateToSchedule(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => SchedulePage()),
+    );
+  }
+
+  void _navigateToDietRecommendation(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => DietRecommendationPage()),
     );
   }
 
@@ -64,22 +80,21 @@ class _HomePageState extends State<HomePage> {
           Padding(
             padding: EdgeInsets.all(16.0),
             child: GridView.count(
-              crossAxisCount: 4,
+              crossAxisCount: 3,
               shrinkWrap: true,
               physics: NeverScrollableScrollPhysics(),
               children: [
                 _buildGridItem(Icons.home, '家庭信息', () => _navigateToFamilyInfo(context)),
                 _buildGridItem(Icons.info, '老人信息', () => _navigateToElderlyInfo(context)),
-                _buildGridItem(Icons.group, '老人关联', () {}),
                 _buildGridItem(Icons.school, '老年学堂', () => _navigateToElderlySchool(context)),
               ],
             ),
           ),
           Divider(thickness: 2, color: Colors.grey[300]),
-          _buildServiceSection('社区服务', [
-            _buildServiceItem(Icons.restaurant, '助餐', Colors.green),
-            _buildServiceItem(Icons.cleaning_services, '助洁', Colors.blue),
-            _buildServiceItem(Icons.bathtub, '助浴', Colors.purple),
+          _buildServiceSection('健康管理', [
+            _buildServiceItem(Icons.calendar_today, '日程管理', Colors.green, () => _navigateToSchedule(context)),
+            _buildServiceItem(Icons.local_dining, '饮食推荐', Colors.blue, () => _navigateToDietRecommendation(context)),
+            _buildServiceItem(Icons.warning, '紧急呼救', Colors.purple, () {}),
           ]),
           Divider(thickness: 2, color: Colors.grey[300]),
           _buildRecommendedArticlesSection(),
@@ -105,21 +120,24 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildServiceItem(IconData icon, String title, Color color) {
-    return Container(
-      margin: EdgeInsets.all(8.0),
-      decoration: BoxDecoration(
-        color: color,
-        borderRadius: BorderRadius.circular(8.0),
-      ),
-      child: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(icon, color: Colors.white, size: 40.0),
-            SizedBox(height: 8.0),
-            Text(title, style: TextStyle(color: Colors.white)),
-          ],
+  Widget _buildServiceItem(IconData icon, String title, Color color, void Function()? onTap) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        margin: EdgeInsets.all(8.0),
+        decoration: BoxDecoration(
+          color: color,
+          borderRadius: BorderRadius.circular(8.0),
+        ),
+        child: Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(icon, color: Colors.white, size: 40.0),
+              SizedBox(height: 8.0),
+              Text(title, style: TextStyle(color: Colors.white)),
+            ],
+          ),
         ),
       ),
     );
